@@ -1,0 +1,175 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: #e0dbcc;
+  color: #757474;
+  font-family: sans-serif;
+  font-size: 20px;
+}
+
+.container {
+  margin: 0 auto;
+  width: 500px;
+}
+
+.game-head::after{
+  content: "";
+  display: block;
+  clear: both;
+}
+h1.title {
+  font-size: 50px;
+  cursor: default;
+}
+.game-container {
+  background: #bbada0;
+  position: relative;
+  cursor: default;
+  width: 500px;
+  height: 500px;
+  border-radius: 6px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 15px;
+}
+.game-grid {
+  position: absolute;
+  z-index: 1;
+}
+.grid-row {
+  margin-bottom: 15px;
+}
+.grid-row:last-child {
+  margin-bottom: 0;
+}
+.grid-row::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.grid-cell {
+  width: 106.25px;
+  height: 106.25px;
+  margin-right: 15px;
+  float: left;
+  border-radius: 3px;
+  background: #e4e4e4;
+}
+.grid-cell:last-child {
+  margin-right: 0;
+}
+
+.tile {
+  width: 106.25px;
+  height: 106.25px;
+  line-height: 116.25px;
+  border-radius: 3px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 55px;
+  z-index: 2;
+}
+
+.tile-2 {
+  background: #b9aa7f;
+}
+.tile-2::after{
+  content: "2";
+  display: block;
+  clear: both;
+}
+.tile-4 {
+  background: #d4a058;
+}
+.tile-4::after{
+  content: "4";
+  display: block;
+  clear: both;
+}
+.tile-8 {
+  background: #ca7807;
+  color: #f9f6f2;
+}
+.tile-8::after{
+  content: "8";
+  display: block;
+  clear: both;
+}
+.tile-16 {
+  background: #ca6d4b;
+  color: #f9f6f2;
+}
+.tile-16::after{
+  content: "16";
+  display: block;
+  clear: both;
+}
+.tile-32 {
+  background: #ca5125;
+  color: #f9f6f2;
+}
+.tile-32::after{
+  content: "32";
+  display: block;
+  clear: both;
+}
+.tile-64 {
+  background: #c73c08;
+  color: #f9f6f2;
+}
+.tile-64::after{
+  content: "64";
+  display: block;
+  clear: both;
+}
+.tile-128 {
+  background: #ffeb3b;
+  color: #757474;
+  font-size: 45px;
+}
+.tile-128::after{
+  content: "128";
+  display: block;
+  clear: both;
+}
+.tile-256 {
+  background: #c0ff38;
+  color: #757474;
+  font-size: 45px;
+}
+.tile-256::after{
+  content: "256";
+  display: block;
+  clear: both;
+}
+.tile-512 {
+  background: #7ba919;
+  color: #f9f6f2;
+  font-size: 45px;
+}
+.tile-512::after{
+  content: "512";
+  display: block;
+  clear: both;
+}
+.tile-1024 {
+  background: #1fab96;
+  color: #f9f6f2;
+  font-size: 35px;
+}
+.tile-1024::after{
+  content: "1024";
+  display: block;
+  clear: both;
+}
+.tile-2048 {
+  background: #01a1ce;
+  color: #f9f6f2;
+  font-size: 35px;
+}
+.tile-2048::after{
+  content: "2048";
+  display: block;
+  clear: both;
+}

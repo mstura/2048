@@ -34,7 +34,7 @@
 
   handler.prototype.eventHandler = function (callback, event) {
     var vector = this.which(event);
-    if (vector) {callback(vector)};
+    if (vector) {return callback(vector)};
   };
   window = window || {};
   window.handler = handler;

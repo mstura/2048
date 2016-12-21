@@ -4,50 +4,61 @@
   function app(){
     this.matrix = new matrix(4);
     this.handler = new handler();
-    this.map = this.acquire(4);
     this.moves = 0;
+    this.residue = [];
     this.handler.listen('keydown',this.run.bind(this), window);
-    //this.handler.listen('DOMContentLoaded',this.newGame.bind(this), window);
+    this.handler.listen('DOMContentLoaded',this.newGame.bind(this), window);
+    this.handler.listen('transitionend', this.renderAfter.bind(this), this.handler.container);
     }
 
     app.prototype.newGame = function () {
       let startTiles = 2;
       for (var i = 0; i < startTiles; i++) {
-        this.matrix.insert(this.randomPosition(),this.transform);
+        this.matrix.insert(this.randomPosition());
       }
-    };
-    app.prototype.acquire = function (size) {
-      var map = [];
-      for (var x = 0; x < size; x++) {
-        var row = map[x] = [];
-
-          for (var y = 0; y < size; y++) {
-          var pos = '.position-'.concat(x+1,'-',y+1);
-          var gridPosition = document.querySelector(pos)
-          row.push(gridPosition);
-          }
-        }
-        return map;
+      this.renderNewTiles();
+      this.renderAfter();
     };
 
     app.prototype.run = function (event) {
-      this.moves = 0;
-      this.handler.eventHandler(this.go, event);
+      this.prepare();
+      let vector = this.handler.eventHandler(event);
+      this.go(vector);
+      this.renderMotion();
       if (this.moves > 0) {
-        //this.matrix.insert(this.randomPosition(),this.transform);
+        this.matrix.insert(this.randomPosition());
+        this.renderNewTiles();
       }
     };
 
-    app.prototype.go = function go(vector){
-        var traversals = game.matrix.traversals(vector);
+    app.prototype.go = function (vector){
+        var traversals = this.matrix.traversals(vector);
         for (var x = 0; x < traversals.x.length; x++) {
         for (var y = 0; y < traversals.y.length; y++) {
           let position = {
             x: traversals.x[x],
             y: traversals.y[y]
           }
-          let moved = game.matrix.travers(position, vector, game.transform);
-          if (moved) {game.moves++;}
+          let tile = this.matrix.cells[position.y][position.x];
+          if (tile) {
+            let destination = this.matrix.travers(position, vector);
+            let testMerge = {
+              x: destination.x + vector.x,
+              y: destination.y + vector.y
+            }
+            if (testMerge.x < 4 && testMerge.y < 4 && testMerge.x > -1 && testMerge.y > -1) {
+              let merge = this.matrix.mergable(tile,testMerge);
+              if (merge) {
+                let object = this.matrix.cells[testMerge.y][testMerge.x];
+                this.matrix.merge(object, tile);
+                this.moves++;
+              }
+            }
+            if (destination !== position) {
+              this.matrix.move(position, destination);
+              this.moves++;
+            }
+          }
         }}
     };
 
@@ -59,35 +70,54 @@
       }
     };
 
-    app.prototype.transform = function (action, position, value, destination) {
-      var parent = game.map[position.y][position.x];
-      if (destination){var newParent = game.map[destination.y][destination.x]};
-      switch (action) {
-        case 'insert':
-          game.handler.createElement(parent,'div',value);
-          break;
-        case 'move':
-          game.handler.clearTile(parent);
-          game.transform('insert', destination, value);
-          break;
-        case 'merge':
-          game.handler.clearTile(parent);
-          game.handler.clearTile(newParent);
-          game.transform('insert',destination,value);
-          break;
-        case 'remove':
-          game.handler.clearTile(parent);
-          break;
-      }
-    };
-
-    app.prototype.render = function () {
+    app.prototype.renderMotion = function () {
       let activeTiles = this.matrix.activeTiles();
       for (var i = 0; i < activeTiles.length; i++) {
-        let position = {x: activeTiles[i].x, y:activeTiles[i].y};
-        this.handler.updateClasses(activeTiles[i].pointer,activeTiles[i].classes);
+        if (activeTiles[i].newPosition) {
+          this.handler.renderPosition(activeTiles[i]);
+        }
+        if (activeTiles[i].mergedfrom) {
+          let f = activeTiles[i].mergedfrom;
+          this.residue.push(f.pointer);
+          this.handler.renderPosition(f, activeTiles[i].newPosition || activeTiles[i].position);
+        }
       }
     };
 
+    app.prototype.renderNewTiles = function () {
+      let activeTiles = this.matrix.activeTiles();
+      for (var i = 0; i < activeTiles.length; i++) {
+        if (!activeTiles[i].pointer) {
+          activeTiles[i].pointer = this.handler.createElement('div');
+          this.handler.renderPosition(activeTiles[i]);
+        }
+      }
+    };
+    app.prototype.prepare = function () {
+      this.moves = 0;
+      let activeTiles = this.matrix.activeTiles();
+      for (var i = 0; i < activeTiles.length; i++) {
+        activeTiles[i].prepare();
+      }
+      for (var i = 0; i < this.residue.length; i++) {
+        if (this.residue[i].parentNode) {
+          this.handler.clearTile(this.residue[i]);
+        }
+      }
+      this.residue = [];
+    };
+
+    app.prototype.renderAfter = function () {
+      let activeTiles = this.matrix.activeTiles();
+      for (var i = 0; i < activeTiles.length; i++) {
+        if (activeTiles[i].mergedfrom) {
+          let f = activeTiles[i].mergedfrom;
+          if (f.pointer.parentNode) {
+            this.handler.clearTile(f.pointer);
+          }
+        }
+        this.handler.renderTile(activeTiles[i]);
+      }
+  };
     var game = new app;
 //}());

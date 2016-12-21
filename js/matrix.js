@@ -20,49 +20,53 @@
 
     matrix.prototype.insert = function (position, value) {
       this.cells[position.y][position.x] = new tile(position);
-      return this.cells[position.y][position.x].classes[0];
     };
 
-    matrix.prototype.remove = function (position, callback) {
+    matrix.prototype.remove = function (position) {
       this.cells[position.y][position.x] = null;
-      if (callback) {callback('remove', position)};
     };
 
-    matrix.prototype.move = function (position, destination, callback) {
+    matrix.prototype.move = function (position, destination) {
+      if (this.cells[position.y][position.x]) {
       if (this.cells[destination.y][destination.x] === null) {
-        let value = this.cells[position.y][position.x];
         this.cells[destination.y][destination.x] = this.cells[position.y][position.x];
-        this.remove(position);
-        callback('move', position, value, destination);
-        return true;
+        this.cells[destination.y][destination.x].update(destination);
+        this.cells[position.y][position.x] = null;
       }
-      return false;
+    }
     };
 
-    matrix.prototype.merge = function (position, destination, value, callback) {
-      if (this.cells[destination.y][destination.x] === value) {
-        this.cells[destination.y][destination.x] += value;
-        this.remove(position);
-        callback('merge', position, this.cells[destination.y][destination.x], destination);
-        return true;
+    matrix.prototype.merge = function (staticObject, object) {
+      if (staticObject.value === object.value) {
+        let value = staticObject.value *2;
+        staticObject.update(null,value,object);
+        this.remove(object.position);
       }
     };
 
-    matrix.prototype.travers = function (position, vector, callback) {
-      if (this.cells[position.y][position.x] !== null) {
+    matrix.prototype.travers = function (position, vector) {
+      //if (this.cells[position.y][position.x] !== null) {
       let destination = {
         x: position.x + vector.x,
         y: position.y + vector.y
-      };
+        };
         if (destination.x < 4 && destination.y < 4 && destination.x > -1 && destination.y > -1) {
-         let moved = this.move(position, destination, callback);
-        if (!moved) {
-          moved = this.merge(position, destination, this.cells[position.y][position.x], callback);
-          } else if (moved) {
-            this.travers(destination, vector, callback);
+          if (this.cells[destination.y][destination.x]) {
+            return position;
+          }else {
+            return this.travers(destination,vector);
           }
-          return moved;
+        } else {
+          return position;
         }
+      //}
+    };
+
+    matrix.prototype.mergable = function (origin, destination) {
+      if (origin.value === this.cells[destination.y][destination.x].value && !origin.mergedfrom && !this.cells[destination.y][destination.x].mergedfrom) {
+        return true;
+      } else {
+        return false;
       }
     };
 

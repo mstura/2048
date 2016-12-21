@@ -2,6 +2,7 @@
   'use strict';
   function handler(){
     this.classes = ['tile', 'tile-', 'position-'];
+    this.container = document.querySelector('.tile-container');
     this.map = {
       37: {x:-1,y:0},
       38: {x:0,y:-1},
@@ -10,10 +11,11 @@
     }
   }
 
-  handler.prototype.createElement = function (parent, tag, value, classArray) {
+  handler.prototype.createElement = function (tag) {
     var element = document.createElement(tag);
-    this.updateClasses(element,classArray)
-    parent.appendChild(element);
+    element.classList.add('tile');
+    this.container.appendChild(element);
+    return element;
   };
 
   handler.prototype.concat = function (value, position) {
@@ -24,8 +26,8 @@
     return cls.concat(pos);
   };
 
-  handler.prototype.clearTile = function (parent) {
-    parent.removeChild(parent.firstChild);
+  handler.prototype.clearTile = function (element) {
+    this.container.removeChild(element);
   };
 
   handler.prototype.listen = function (type, callback,target) {
@@ -36,16 +38,37 @@
     return this.map[event.keyCode];
   };
 
-  handler.prototype.eventHandler = function (callback, event) {
+  handler.prototype.eventHandler = function (event) {
     var vector = this.which(event);
-    if (vector) {return callback(vector)};
+    if (vector) {return vector};
   };
 
-  handler.prototype.updateClasses = function (element, classArray) {
-    for (var i = 0; i < classArray.length; i++) {
-      element.classList.add(classArray[i]);
+  handler.prototype.renderPosition = function (object, newPosition) {
+    let np = 'position-';
+    if (newPosition) {
+      np = np.concat(newPosition.x,'-',newPosition.y);
+    } else {
+      np = np.concat(object.newPosition.x,'-',object.newPosition.y);
+    }
+    let element = object.pointer;
+    element.classList.add(np);
+    if (np !== object.classes[0]) {element.classList.remove(object.classes[0]);}
+  };
+
+  handler.prototype.renderTile = function (object) {
+    if (object) {
+      let element = object.pointer;
+      let newClass = 'tile-'.concat(object.value);
+      if (object.mergedfrom) {
+        let extra = 'tile-'.concat(object.mergedfrom.value);
+        element.classList.add(newClass);
+        element.classList.remove(extra);
+      }else if (newClass !== object.classes[1]) {
+        element.classList.add(newClass);
+      }
     }
   };
+
   window = window || {};
   window.handler = handler;
 }(window));

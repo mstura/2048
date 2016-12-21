@@ -1,4 +1,4 @@
-//(function() {
+(function() {
   'use strict';
 
   function app(){
@@ -120,4 +120,4 @@
       }
   };
     var game = new app;
-//}());
+}());

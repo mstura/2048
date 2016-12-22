@@ -34,22 +34,15 @@
     };
 
     app.prototype.run = function (event) {
-      if (!this.state) {
-      }
       this.prepare();
       let vector = this.handler.eventHandler(event);
       this.go(vector);
       if (this.moves > 0) {
         this.updateScore();
         this.renderMotion();
-        let randomPosition = this.randomPosition();
-        if (randomPosition) {
-          this.matrix.insert(randomPosition);
+          this.matrix.insert(this.randomPosition());
           this.renderNewTiles();
-        } else {
-          this.state = false;
         }
-      }
     };
 
     app.prototype.go = function (vector){

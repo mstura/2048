@@ -5,7 +5,6 @@
     this.matrix = new matrix(4);
     this.handler = new handler();
     this.moves = 0;
-    this.residue = [];
     this.handler.listen('keydown',this.run.bind(this), window);
     this.handler.listen('DOMContentLoaded',this.newGame.bind(this), window);
     this.handler.listen('transitionend', this.renderAfter.bind(this), this.handler.container);
@@ -78,7 +77,6 @@
         }
         if (activeTiles[i].mergedfrom) {
           let f = activeTiles[i].mergedfrom;
-          this.residue.push(f.pointer);
           this.handler.renderPosition(f, activeTiles[i].newPosition || activeTiles[i].position);
         }
       }
@@ -94,30 +92,62 @@
       }
     };
     app.prototype.prepare = function () {
-      this.moves = 0;
       let activeTiles = this.matrix.activeTiles();
       for (var i = 0; i < activeTiles.length; i++) {
         activeTiles[i].prepare();
       }
-      for (var i = 0; i < this.residue.length; i++) {
-        if (this.residue[i].parentNode) {
-          this.handler.clearTile(this.residue[i]);
-        }
+      if (this.moves !== 0) {
+        this.clearResidue();
+        this.moves = 0;
       }
-      this.residue = [];
+      this.renderBoard();
     };
 
+    app.prototype.renderBoard = function () {
+      let activeTiles = this.matrix.activeTiles();
+      for (var x = 0; x < activeTiles.length; x++) {
+        activeTiles[x].pointer.className = "";
+          activeTiles[x].pointer.className = activeTiles[x].classes[0].concat(' ',activeTiles[x].classes[1],' ',activeTiles[x].classes[2]);
+      }
+    };
+
+    app.prototype.clearResidue = function () {
+      let elements = document.querySelectorAll('.tile');
+      let activeTiles = this.matrix.activeTiles();
+      let residue = [];
+
+      for (var i = 0; i < elements.length; i++) {
+        residue.push(elements[i]);
+      }
+
+      let realResidue = residue.filter(function (item){
+        for (var i = 0; i < activeTiles.length; i++) {
+        if (item === activeTiles[i].pointer) {
+          return null;
+          }
+        }
+        return item;
+      });
+
+      for (var i = 0; i < realResidue.length; i++) {
+        if (realResidue[i]) {
+          this.handler.clearTile(realResidue[i]);
+        }
+      }
+    };
     app.prototype.renderAfter = function () {
       let activeTiles = this.matrix.activeTiles();
       for (var i = 0; i < activeTiles.length; i++) {
         if (activeTiles[i].mergedfrom) {
           let f = activeTiles[i].mergedfrom;
           if (f.pointer.parentNode) {
-            this.handler.clearTile(f.pointer);
+            //this.handler.clearTile(f.pointer);
           }
         }
         this.handler.renderTile(activeTiles[i]);
       }
+      this.clearResidue();
+      this.moves = 0;
   };
     var game = new app;
 }());

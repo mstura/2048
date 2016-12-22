@@ -138,12 +138,6 @@
     app.prototype.renderAfter = function () {
       let activeTiles = this.matrix.activeTiles();
       for (var i = 0; i < activeTiles.length; i++) {
-        if (activeTiles[i].mergedfrom) {
-          let f = activeTiles[i].mergedfrom;
-          if (f.pointer.parentNode) {
-            //this.handler.clearTile(f.pointer);
-          }
-        }
         this.handler.renderTile(activeTiles[i]);
       }
       this.clearResidue();

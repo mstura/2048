@@ -21,12 +21,14 @@
   };
 
   tile.prototype.prepare = function () {
-    this.mergedfrom = null;
-    if (this.newPosition) {
+    if (this.newPosition || this.mergedfrom) {
+      this.mergedfrom = null;
       this.classes[1] = 'tile-'.concat(this.value);
-      this.classes[0] = 'position-'.concat(this.newPosition.x,'-',this.newPosition.y);
-      this.position = this.newPosition;
-      this.newPosition = null;
+      if (this.newPosition) {
+        this.classes[0] = 'position-'.concat(this.newPosition.x,'-',this.newPosition.y);
+        this.position = this.newPosition;
+        this.newPosition = null;
+      }
     }
   };
 

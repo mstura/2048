@@ -1,8 +1,9 @@
 (function(window) {
   'use strict';
   function handler(){
-    this.classes = ['tile', 'tile-', 'position-'];
+    this.scoreContainer = document.querySelector('.score-container');
     this.container = document.querySelector('.tile-container');
+
     this.map = {
       37: {x:-1,y:0},
       38: {x:0,y:-1},
@@ -11,19 +12,15 @@
     }
   }
 
+  handler.prototype.scoreUpdate = function (value) {
+    this.scoreContainer.innerHTML = value;
+  };
+
   handler.prototype.createElement = function (tag) {
     var element = document.createElement(tag);
     element.classList.add('tile');
     this.container.appendChild(element);
     return element;
-  };
-
-  handler.prototype.concat = function (value, position) {
-    var cls = '';
-    var pos = '';
-    cls = this.classes[1].concat(value || 2);
-    pos = this.classes[2].concat(position.x,'-',position.y);
-    return cls.concat(pos);
   };
 
   handler.prototype.clearTile = function (element) {

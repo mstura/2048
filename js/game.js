@@ -4,11 +4,25 @@
   function app(){
     this.matrix = new matrix(4);
     this.handler = new handler();
+    this.score = 0;
     this.moves = 0;
+    this.state = true;
     this.handler.listen('keydown',this.run.bind(this), window);
     this.handler.listen('DOMContentLoaded',this.newGame.bind(this), window);
     this.handler.listen('transitionend', this.renderAfter.bind(this), this.handler.container);
     }
+
+    app.prototype.updateScore = function () {
+      let activeTiles = this.matrix.activeTiles();
+      let score = 0;
+      activeTiles.forEach(function(object){
+        if (object.mergedfrom) {
+          score += object.value;
+        }
+      });
+      this.score += score;
+      this.handler.scoreUpdate(this.score);
+    };
 
     app.prototype.newGame = function () {
       let startTiles = 2;
@@ -20,13 +34,21 @@
     };
 
     app.prototype.run = function (event) {
+      if (!this.state) {
+      }
       this.prepare();
       let vector = this.handler.eventHandler(event);
       this.go(vector);
-      this.renderMotion();
       if (this.moves > 0) {
-        this.matrix.insert(this.randomPosition());
-        this.renderNewTiles();
+        this.updateScore();
+        this.renderMotion();
+        let randomPosition = this.randomPosition();
+        if (randomPosition) {
+          this.matrix.insert(randomPosition);
+          this.renderNewTiles();
+        } else {
+          this.state = false;
+        }
       }
     };
 
@@ -93,30 +115,29 @@
     };
     app.prototype.prepare = function () {
       let activeTiles = this.matrix.activeTiles();
-      for (var i = 0; i < activeTiles.length; i++) {
-        activeTiles[i].prepare();
-      }
+      activeTiles.forEach(function (tile){
+        tile.prepare();
+      });
       if (this.moves !== 0) {
         this.clearResidue();
         this.renderBoard();
         this.moves = 0;
       }
-
     };
 
     app.prototype.renderBoard = function () {
       let activeTiles = this.matrix.activeTiles();
-      for (var x = 0; x < activeTiles.length; x++) {
-        activeTiles[x].pointer.className = "";
-          activeTiles[x].pointer.className = activeTiles[x].classes[0].concat(' ',activeTiles[x].classes[1],' ',activeTiles[x].classes[2]);
-      }
+      activeTiles.forEach(function(tile){
+        tile.pointer.className = "";
+          tile.pointer.className = tile.classes[0].concat(' ',tile.classes[1],' ',tile.classes[2]);
+      });
     };
 
     app.prototype.clearResidue = function () {
       let elements = document.querySelectorAll('.tile');
       let activeTiles = this.matrix.activeTiles();
       let residue = [];
-
+      let self = this;
       for (var i = 0; i < elements.length; i++) {
         residue.push(elements[i]);
       }
@@ -130,17 +151,19 @@
         return item;
       });
 
-      for (var i = 0; i < realResidue.length; i++) {
-        if (realResidue[i]) {
-          this.handler.clearTile(realResidue[i]);
+      realResidue.forEach(function (obj){
+        if (obj) {
+          self.handler.clearTile(obj);
         }
-      }
+      });
     };
+
     app.prototype.renderAfter = function () {
+      let self = this;
       let activeTiles = this.matrix.activeTiles();
-      for (var i = 0; i < activeTiles.length; i++) {
-        this.handler.renderTile(activeTiles[i]);
-      }
+      activeTiles.forEach(function (tile) {
+        self.handler.renderTile(tile);
+      });
       this.clearResidue();
       this.moves = 0;
   };

@@ -98,9 +98,10 @@
       }
       if (this.moves !== 0) {
         this.clearResidue();
+        this.renderBoard();
         this.moves = 0;
       }
-      this.renderBoard();
+
     };
 
     app.prototype.renderBoard = function () {

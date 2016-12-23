@@ -1,4 +1,4 @@
-(function() {
+//(function() {
   'use strict';
 
   function app(){
@@ -6,7 +6,7 @@
     this.handler = new handler();
     this.score = 0;
     this.moves = 0;
-    this.state = true;
+    this.state = null;
     this.handler.listen('keydown',this.run.bind(this), window);
     this.handler.listen('DOMContentLoaded',this.newGame.bind(this), window);
     this.handler.listen('transitionend', this.renderAfter.bind(this), this.handler.container);
@@ -25,6 +25,13 @@
     };
 
     app.prototype.newGame = function () {
+      if (this.state === false) {
+        this.clearBoard();
+        this.handler.modCls('game-over',this.handler.loseState,'remove');
+        this.score = 0;
+        this.handler.scoreUpdate(this.score);
+      }
+      this.state = true;
       let startTiles = 2;
       for (var i = 0; i < startTiles; i++) {
         this.matrix.insert(this.randomPosition());
@@ -33,15 +40,24 @@
       this.renderAfter();
     };
 
+    app.prototype.gameOver = function () {
+      this.handler.modCls('game-over',this.handler.loseState,'add');
+      this.handler.listen('click', this.newGame.bind(this), this.handler.ngBTN);
+    };
+
     app.prototype.run = function (event) {
       this.prepare();
       let vector = this.handler.eventHandler(event);
-      this.go(vector);
+      if (vector) { this.go(vector); }
       if (this.moves > 0) {
         this.updateScore();
         this.renderMotion();
           this.matrix.insert(this.randomPosition());
           this.renderNewTiles();
+          this.state = this.matrix.checkState();
+          if (!this.state) {
+            this.gameOver();
+          }
         }
     };
 
@@ -126,6 +142,18 @@
       });
     };
 
+    app.prototype.clearBoard = function () {
+      let self = this;
+      let activeTiles = this.matrix.activeTiles();
+
+      activeTiles.forEach(function(obj) {
+        let pointer = obj.pointer;
+        let pos = obj.newPosition || obj.position;
+        self.handler.clearTile(pointer);
+        self.matrix.remove(pos);
+      });
+    };
+
     app.prototype.clearResidue = function () {
       let elements = document.querySelectorAll('.tile');
       let activeTiles = this.matrix.activeTiles();
@@ -161,4 +189,4 @@
       this.moves = 0;
   };
     var game = new app;
-}());
+//}());

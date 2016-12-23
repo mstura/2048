@@ -3,6 +3,8 @@
   function handler(){
     this.scoreContainer = document.querySelector('.score-container');
     this.container = document.querySelector('.tile-container');
+    this.loseState = document.querySelector('.game-message');
+    this.ngBTN = document.querySelector('.restart');
 
     this.map = {
       37: {x:-1,y:0},
@@ -14,6 +16,23 @@
 
   handler.prototype.scoreUpdate = function (value) {
     this.scoreContainer.innerHTML = value;
+  };
+
+  handler.prototype.modCls = function (className, target, action) {
+    switch (action) {
+      case 'add':
+        target.classList.add(className);
+        break;
+      case 'remove':
+        target.classList.remove(className);
+        break;
+      case 'clear':
+        target.className = '';
+        break;
+      case 'fill':
+        target.className = className;
+        break;
+    }
   };
 
   handler.prototype.createElement = function (tag) {

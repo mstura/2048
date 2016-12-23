@@ -62,11 +62,19 @@
       //}
     };
 
-    matrix.prototype.mergable = function (origin, destination) {
-      if (origin.value === this.cells[destination.y][destination.x].value && !origin.mergedfrom && !this.cells[destination.y][destination.x].mergedfrom) {
-        return true;
-      } else {
-        return false;
+    matrix.prototype.mergable = function (origin, destination, testingState) {
+      if (!testingState) {
+        if (origin.value === this.cells[destination.y][destination.x].value && !origin.mergedfrom && !this.cells[destination.y][destination.x].mergedfrom) {
+          return true;
+        } else {
+          return false;
+        }
+      } else if (testingState) {
+        if (this.cells[destination.y][destination.x] === null || origin.value === this.cells[destination.y][destination.x].value) {
+          return true;
+        } else {
+          return false;
+        }
       }
     };
 
@@ -111,6 +119,33 @@ for (var i = 0; i < this.size; i++) {
       }
     });
   return activeTiles;
+};
+
+matrix.prototype.checkState = function () {
+let vectors = [{x:1,y:0},{x:0,y:1}];
+let activeTiles = this.activeTiles();
+if (activeTiles.length === 16) {
+for (var y = 0; y < this.size; y++) {
+  for (var x = 0; x < this.size; x++) {
+    for (var i = 0; i < vectors.length; i++) {
+      let tile = this.cells[y][x];
+      if (tile) {
+      let pos = tile.newPosition || tile.position;
+      let testdest = {x: pos.x + vectors[i].x,
+                      y: pos.y + vectors[i].y};
+        if (testdest.x < 4 && testdest.y < 4 && testdest.x > -1 && testdest.y > -1) {
+          if (this.mergable(tile, testdest, true)) {
+            return true;
+            }
+          }
+        }
+      }
+    }
+  }
+    return false;
+  } else {
+    return true;
+  }
 };
 
   window = window || {};

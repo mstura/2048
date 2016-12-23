@@ -4,7 +4,8 @@
 Currently implemented features:
 - Transition animations for all tiles.
 - Score tracking
-- Failure state (Pending)
+- Failure state
+- take back function / time machine (pending / in progress)
 
 Current architecture avoids destroying or creating HTML elements needlessly,
 all transitions are handled with class changes. A few functions have been implemented to prevent

@@ -1,4 +1,4 @@
-//(function() {
+(function() {
   'use strict';
 
   function app(){
@@ -189,4 +189,4 @@
       this.moves = 0;
   };
     var game = new app;
-//}());
+}());

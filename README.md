@@ -9,4 +9,4 @@ Currently implemented features:
 
 Current architecture avoids destroying or creating HTML elements needlessly,
 all transitions are handled with class changes. A few functions have been implemented to prevent
-rending bugs due to playing faster then the game is rendering the tile transitions.
+rendering bugs due to playing faster then the game is rendering the tile transitions.

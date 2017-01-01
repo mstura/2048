@@ -1,4 +1,4 @@
-(function() {
+//(function() {
   'use strict';
 
   function app(){
@@ -188,5 +188,24 @@
       this.clearResidue();
       this.moves = 0;
   };
+
+  app.prototype.timeMachine = function () {
+    let self = this;
+    let activeTiles = this.matrix.activeTiles();
+    this.matrix.clear();
+
+    activeTiles.forEach(function(tile){
+      let position = tile.position;
+      let mergedTile = tile.mergedfrom;
+      if (position) {
+        self.matrix.cells[position.y][position.x] = tile;
+      }
+      if (mergedTile) {
+        self.matrix.cells[mergedTile.position.y][mergedTile.position.x] = mergedTile;
+      }
+    });
+    this.clearResidue();
+    this.renderBoard();
+  };
     var game = new app;
-}());
+//}());

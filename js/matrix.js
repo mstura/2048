@@ -148,6 +148,18 @@ for (var y = 0; y < this.size; y++) {
   }
 };
 
+matrix.prototype.clear = function () {
+  for (var y = 0; y < this.size; y++) {
+    for (var x = 0; x < this.size; x++) {
+      let position = {
+        x: x,
+        y: y
+      }
+      this.remove(position);
+    }
+  }
+};
+
   window = window || {};
   window.matrix = matrix;
 }(window));

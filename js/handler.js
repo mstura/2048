@@ -5,6 +5,7 @@
     this.container = document.querySelector('.tile-container');
     this.loseState = document.querySelector('.game-message');
     this.ngBTN = document.querySelector('.restart');
+    this.timeBTN = document.querySelector('.takeBack');
 
     this.map = {
       37: {x:-1,y:0},

@@ -1,4 +1,4 @@
-//(function() {
+(function() {
   'use strict';
 
   function app(){
@@ -7,9 +7,11 @@
     this.score = 0;
     this.moves = 0;
     this.state = null;
+    this.timeWarp = false;
     this.handler.listen('keydown',this.run.bind(this), window);
     this.handler.listen('DOMContentLoaded',this.newGame.bind(this), window);
     this.handler.listen('transitionend', this.renderAfter.bind(this), this.handler.container);
+    this.handler.listen('click', this.timeMachine.bind(this), this.handler.timeBTN);
     }
 
     app.prototype.updateScore = function () {
@@ -54,8 +56,10 @@
         this.renderMotion();
           this.matrix.insert(this.randomPosition());
           this.renderNewTiles();
+          this.timeState(true);
           this.state = this.matrix.checkState();
           if (!this.state) {
+            this.timeState(false);
             this.gameOver();
           }
         }
@@ -190,6 +194,7 @@
   };
 
   app.prototype.timeMachine = function () {
+    if (this.timeWarp === true) {
     let self = this;
     let activeTiles = this.matrix.activeTiles();
     this.matrix.clear();
@@ -199,13 +204,31 @@
       let mergedTile = tile.mergedfrom;
       if (position) {
         self.matrix.cells[position.y][position.x] = tile;
+        tile.update(position);
       }
       if (mergedTile) {
+        tile.update(null,mergedTile.value);
         self.matrix.cells[mergedTile.position.y][mergedTile.position.x] = mergedTile;
+        mergedTile.update(mergedTile.position);
+        mergedTile.pointer = null;
+        tile.mergedfrom = null;
       }
     });
     this.clearResidue();
+    this.renderNewTiles();
     this.renderBoard();
+    this.timeState(false);
+  }
+};
+
+  app.prototype.timeState = function (value) {
+    this.timeWarp = value;
+    if (value) {
+      this.handler.modCls('unavailable', this.handler.timeBTN.parentNode, 'remove');
+    } else {
+      this.handler.modCls('unavailable', this.handler.timeBTN.parentNode, 'add');
+    }
   };
+
     var game = new app;
-//}());
+}());

@@ -8,8 +8,31 @@ body {
 }
 
 .timeMachine{
-  border: 1px;
-  background-color: lightblue;
+  padding: 0px 0px 0px 5px;
+  margin: 0px;
+  width: 100px;
+  border-radius: 5px;
+  background-color: #98c781;
+}
+
+.timeMachine a {
+  cursor: context-menu;
+  text-decoration: none;
+  font-size: 19px;
+  font-weight: bold;
+}
+
+.timeMachine a::after{
+  content: "Take Back";
+}
+
+.timeMachine.unavailable {
+  cursor: not-allowed;
+  background-color: #b9b4a6;
+}
+
+.timeMachine.unavailable a{
+  cursor: not-allowed;
 }
 
 .container {

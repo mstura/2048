@@ -80,9 +80,9 @@
               x: destination.x + vector.x,
               y: destination.y + vector.y
             }
+
             if (testMerge.x < 4 && testMerge.y < 4 && testMerge.x > -1 && testMerge.y > -1) {
-              let merge = this.matrix.mergable(tile,testMerge);
-              if (merge) {
+              if (this.matrix.mergable(tile,testMerge)) {
                 let object = this.matrix.cells[testMerge.y][testMerge.x];
                 this.matrix.merge(object, tile);
                 this.moves++;
@@ -126,6 +126,7 @@
         }
       }
     };
+
     app.prototype.prepare = function () {
       let activeTiles = this.matrix.activeTiles();
       activeTiles.forEach(function (tile){
@@ -140,9 +141,12 @@
 
     app.prototype.renderBoard = function () {
       let activeTiles = this.matrix.activeTiles();
+      let self = this;
+
       activeTiles.forEach(function(tile){
-        tile.pointer.className = "";
-          tile.pointer.className = tile.classes[0].concat(' ',tile.classes[1],' ',tile.classes[2]);
+        self.handler.modCls(null,tile.pointer,'clear');
+        let cls = tile.classes[0].concat(' ',tile.classes[1],' ',tile.classes[2]);
+        self.handler.modCls(cls,tile.pointer,'fill');
       });
     };
 
@@ -198,7 +202,6 @@
     let self = this;
     let activeTiles = this.matrix.activeTiles();
     this.matrix.clear();
-
     activeTiles.forEach(function(tile){
       let position = tile.position;
       let mergedTile = tile.mergedfrom;
@@ -207,13 +210,16 @@
         tile.update(position);
       }
       if (mergedTile) {
+        let newScore = tile.value;
         tile.update(null,mergedTile.value);
         self.matrix.cells[mergedTile.position.y][mergedTile.position.x] = mergedTile;
         mergedTile.update(mergedTile.position);
         mergedTile.pointer = null;
         tile.mergedfrom = null;
+        self.score -= newScore;
       }
     });
+    this.handler.scoreUpdate(this.score);
     this.clearResidue();
     this.renderNewTiles();
     this.renderBoard();

@@ -68,8 +68,8 @@
       np = np.concat(object.newPosition.x,'-',object.newPosition.y);
     }
     let element = object.pointer;
-    element.classList.add(np);
-    if (np !== object.classes[0]) {element.classList.remove(object.classes[0]);}
+    this.modCls(np,element,'add');
+    if (np !== object.classes[0]) {this.modCls(object.classes[0],element,'remove');}
   };
 
   handler.prototype.renderTile = function (object) {
@@ -78,10 +78,10 @@
       let newClass = 'tile-'.concat(object.value);
       if (object.mergedfrom) {
         let extra = 'tile-'.concat(object.mergedfrom.value);
-        element.classList.add(newClass);
-        element.classList.remove(extra);
+        this.modCls(newClass,element,'add');
+        this.modCls(extra,element,'remove');
       }else if (newClass !== object.classes[1]) {
-        element.classList.add(newClass);
+        this.modCls(newClass,element,'add');
       }
     }
   };

@@ -270,6 +270,36 @@ h1.title {
   display: block;
   clear: both;
 }
+.tile-4096 {
+  background: #673ab7;
+  color: #f9f6f2;
+  font-size: 35px;
+}
+.tile-4096::after{
+  content: "4096";
+  display: block;
+  clear: both;
+}
+.tile-8192 {
+  background: #673ab7;
+  color: #f9f6f2;
+  font-size: 35px;
+}
+.tile-8192::after{
+  content: "8192";
+  display: block;
+  clear: both;
+}
+.tile-16384 {
+  background: #673ab7;
+  color: #f9f6f2;
+  font-size: 25px;
+}
+.tile-16384::after{
+  content: "16384";
+  display: block;
+  clear: both;
+}
   .position-0-0 {
     position: absolute;
     left: 0px;

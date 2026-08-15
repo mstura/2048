@@ -87,6 +87,7 @@
               if (this.matrix.mergable(tile,testMerge)) {
                 let object = this.matrix.cells[testMerge.y][testMerge.x];
                 this.matrix.merge(object, tile);
+                this.createRipple(object);
                 this.moves++;
               }
             }
@@ -197,6 +198,38 @@
       });
       this.clearResidue();
       this.moves = 0;
+  };
+
+  app.prototype.createRipple = function (tile) {
+    let ripple = document.createElement('div');
+    ripple.className = 'tile-ripple';
+    
+    // Get the tile's position
+    let tileElement = tile.pointer;
+    let rect = tileElement.getBoundingClientRect();
+    let containerRect = this.handler.container.getBoundingClientRect();
+    
+    // Calculate position relative to the container
+    let x = rect.left - containerRect.left + (rect.width / 2);
+    let y = rect.top - containerRect.top + (rect.height / 2);
+    
+    ripple.style.left = x + 'px';
+    ripple.style.top = y + 'px';
+    ripple.style.transform = 'translate(-50%, -50%)';
+    
+    this.handler.container.appendChild(ripple);
+    
+    // Trigger animation
+    requestAnimationFrame(function() {
+      ripple.classList.add('active');
+    });
+    
+    // Remove ripple element after animation completes
+    setTimeout(function() {
+      if (ripple.parentNode) {
+        ripple.parentNode.removeChild(ripple);
+      }
+    }, 600);
   };
 
   app.prototype.timeMachine = function () {

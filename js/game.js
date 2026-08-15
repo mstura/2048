@@ -215,7 +215,7 @@
       
       // Random angle around 360 degrees
       let angle = (i / particleCount) * Math.PI * 2;
-      let distance = 60; // How far particles travel
+      let distance = 100; // How far particles travel
       
       let tx = Math.cos(angle) * distance;
       let ty = Math.sin(angle) * distance;
@@ -250,7 +250,7 @@
         if (particle.parentNode) {
           particle.parentNode.removeChild(particle);
         }
-      }, 500);
+      }, 600);
     }
   };
 

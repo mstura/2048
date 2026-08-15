@@ -48,21 +48,23 @@
     };
 
     app.prototype.run = function (event) {
-      this.prepare();
       let vector = this.handler.eventHandler(event);
-      if (vector) { this.go(vector); }
-      if (this.moves > 0) {
-        this.updateScore();
-        this.renderMotion();
-          this.matrix.insert(this.randomPosition());
-          this.renderNewTiles();
-          this.timeState(true);
-          this.state = this.matrix.checkState();
-          if (!this.state) {
-            this.timeState(false);
-            this.gameOver();
+      if (vector) {
+        this.prepare();
+        this.go(vector);
+        if (this.moves > 0) {
+          this.updateScore();
+          this.renderMotion();
+            this.matrix.insert(this.randomPosition());
+            this.renderNewTiles();
+            this.timeState(true);
+            this.state = this.matrix.checkState();
+            if (!this.state) {
+              this.timeState(false);
+              this.gameOver();
+            }
           }
-        }
+      }
     };
 
     app.prototype.go = function (vector){
@@ -224,7 +226,7 @@
     this.renderNewTiles();
     this.renderBoard();
     this.timeState(false);
-  }
+   }
 };
 
   app.prototype.timeState = function (value) {

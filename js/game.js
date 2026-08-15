@@ -48,21 +48,23 @@
     };
 
     app.prototype.run = function (event) {
-      this.prepare();
       let vector = this.handler.eventHandler(event);
-      if (vector) { this.go(vector); }
-      if (this.moves > 0) {
-        this.updateScore();
-        this.renderMotion();
-          this.matrix.insert(this.randomPosition());
-          this.renderNewTiles();
-          this.timeState(true);
-          this.state = this.matrix.checkState();
-          if (!this.state) {
-            this.timeState(false);
-            this.gameOver();
+      if (vector) {
+        this.prepare();
+        this.go(vector);
+        if (this.moves > 0) {
+          this.updateScore();
+          this.renderMotion();
+            this.matrix.insert(this.randomPosition());
+            this.renderNewTiles();
+            this.timeState(true);
+            this.state = this.matrix.checkState();
+            if (!this.state) {
+              this.timeState(false);
+              this.gameOver();
+            }
           }
-        }
+      }
     };
 
     app.prototype.go = function (vector){
@@ -84,6 +86,7 @@
             if (testMerge.x < 4 && testMerge.y < 4 && testMerge.x > -1 && testMerge.y > -1) {
               if (this.matrix.mergable(tile,testMerge)) {
                 let object = this.matrix.cells[testMerge.y][testMerge.x];
+                this.createParticleBurst(testMerge);
                 this.matrix.merge(object, tile);
                 this.moves++;
               }
@@ -197,6 +200,60 @@
       this.moves = 0;
   };
 
+  app.prototype.createParticleBurst = function (mergePosition) {
+    let self = this;
+    let particleCount = 8;
+    
+    // Calculate center position of the merged tile
+    let centerX = mergePosition.x * 121.25 + 53.5;
+    let centerY = mergePosition.y * 121.25 + 53.5;
+    
+    // Create particles that burst outward
+    for (let i = 0; i < particleCount; i++) {
+      let particle = document.createElement('div');
+      particle.className = 'particle';
+      
+      // Random angle around 360 degrees
+      let angle = (i / particleCount) * Math.PI * 2;
+      let distance = 100; // How far particles travel
+      
+      let tx = Math.cos(angle) * distance;
+      let ty = Math.sin(angle) * distance;
+      
+      // Set CSS variables for animation
+      particle.style.setProperty('--tx', tx + 'px');
+      particle.style.setProperty('--ty', ty + 'px');
+      
+      // Position particle at merge point
+      particle.style.left = centerX + 'px';
+      particle.style.top = centerY + 'px';
+      particle.style.transform = 'translate(-50%, -50%)';
+      
+      // Use the merged tile's color as particle color
+      let mergedTile = this.matrix.cells[mergePosition.y][mergePosition.x];
+      if (mergedTile && mergedTile.pointer) {
+        let computedStyle = window.getComputedStyle(mergedTile.pointer);
+        particle.style.backgroundColor = computedStyle.backgroundColor;
+      } else {
+        particle.style.backgroundColor = '#ffffff';
+      }
+      
+      this.handler.container.appendChild(particle);
+      
+      // Trigger animation
+      requestAnimationFrame(function() {
+        particle.classList.add('active');
+      });
+      
+      // Remove particle after animation completes
+      setTimeout(function() {
+        if (particle.parentNode) {
+          particle.parentNode.removeChild(particle);
+        }
+      }, 600);
+    }
+  };
+
   app.prototype.timeMachine = function () {
     if (this.timeWarp === true) {
     let self = this;
@@ -224,7 +281,7 @@
     this.renderNewTiles();
     this.renderBoard();
     this.timeState(false);
-  }
+   }
 };
 
   app.prototype.timeState = function (value) {

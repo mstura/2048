@@ -86,8 +86,8 @@
             if (testMerge.x < 4 && testMerge.y < 4 && testMerge.x > -1 && testMerge.y > -1) {
               if (this.matrix.mergable(tile,testMerge)) {
                 let object = this.matrix.cells[testMerge.y][testMerge.x];
+                this.createRipple(object, testMerge);
                 this.matrix.merge(object, tile);
-                this.createRipple(object);
                 this.moves++;
               }
             }
@@ -200,18 +200,14 @@
       this.moves = 0;
   };
 
-  app.prototype.createRipple = function (tile) {
+  app.prototype.createRipple = function (tile, mergePosition) {
     let ripple = document.createElement('div');
     ripple.className = 'tile-ripple';
     
-    // Get the tile's position
-    let tileElement = tile.pointer;
-    let rect = tileElement.getBoundingClientRect();
-    let containerRect = this.handler.container.getBoundingClientRect();
-    
-    // Calculate position relative to the container
-    let x = rect.left - containerRect.left + (rect.width / 2);
-    let y = rect.top - containerRect.top + (rect.height / 2);
+    // Calculate position based on merge position in the grid
+    // Each tile is 107px with 15px gaps
+    let x = mergePosition.x * 121.25 + 53.5; // Center of tile
+    let y = mergePosition.y * 121.25 + 53.5; // Center of tile
     
     ripple.style.left = x + 'px';
     ripple.style.top = y + 'px';

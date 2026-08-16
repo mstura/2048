@@ -37,7 +37,7 @@
   };
 
   handler.prototype.createElement = function (tag) {
-    var element = document.createElement(tag);
+    let element = document.createElement(tag);
     element.classList.add('tile');
     this.container.appendChild(element);
     return element;
@@ -56,7 +56,7 @@
   };
 
   handler.prototype.eventHandler = function (event) {
-    var vector = this.which(event);
+    let vector = this.which(event);
     if (vector) {return vector};
   };
 

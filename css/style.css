@@ -2,7 +2,7 @@ body {
   margin: 0;
   padding: 0;
   background: #e0dbcc;
-  color: #757474;
+  color: #3f3f3f;
   font-family: sans-serif;
   font-size: 20px;
 }
@@ -12,7 +12,7 @@ body {
   margin: 0px;
   width: 100px;
   border-radius: 5px;
-  background-color: #98c781;
+  background-color: #4a7a34;
 }
 
 .timeMachine a {
@@ -20,6 +20,7 @@ body {
   text-decoration: none;
   font-size: 19px;
   font-weight: bold;
+  color: #ffffff;
 }
 
 .timeMachine a::after{
@@ -28,7 +29,7 @@ body {
 
 .timeMachine.unavailable {
   cursor: not-allowed;
-  background-color: #b9b4a6;
+  background-color: #706b60;
 }
 
 .timeMachine.unavailable a{
@@ -53,7 +54,7 @@ h1.title {
 .score-container {
   position: relative;
   float: right;
-  background: #bbada0;
+  background: #6b5f54;
   padding: 15px 25px;
   font-size: 25px;
   height: 25px;
@@ -115,11 +116,11 @@ h1.title {
 }
 .game-container .game-message a {
   display: inline-block;
-  background: #8f7a66;
+  background: #6b5647;
   border-radius: 3px;
   padding: 0 20px;
   text-decoration: none;
-  color: #f9f6f2;
+  color: #ffffff;
   height: 40px;
   line-height: 42px;
   margin-left: 9px;
@@ -170,7 +171,8 @@ h1.title {
 }
 
 .tile-2 {
-  background: #b9aa7f;
+  background: #eee4da;
+  color: #3a3a3a;
 }
 .tile-2::after{
   content: "2";
@@ -178,7 +180,8 @@ h1.title {
   clear: both;
 }
 .tile-4 {
-  background: #d4a058;
+  background: #e0d4b0;
+  color: #3a3a3a;
 }
 .tile-4::after{
   content: "4";
@@ -186,8 +189,8 @@ h1.title {
   clear: both;
 }
 .tile-8 {
-  background: #ca7807;
-  color: #f9f6f2;
+  background: #b3550f;
+  color: #ffffff;
 }
 .tile-8::after{
   content: "8";
@@ -195,8 +198,8 @@ h1.title {
   clear: both;
 }
 .tile-16 {
-  background: #ca6d4b;
-  color: #f9f6f2;
+  background: #c2551f;
+  color: #ffffff;
 }
 .tile-16::after{
   content: "16";
@@ -204,8 +207,8 @@ h1.title {
   clear: both;
 }
 .tile-32 {
-  background: #ca5125;
-  color: #f9f6f2;
+  background: #b8421a;
+  color: #ffffff;
 }
 .tile-32::after{
   content: "32";
@@ -213,8 +216,8 @@ h1.title {
   clear: both;
 }
 .tile-64 {
-  background: #c73c08;
-  color: #f9f6f2;
+  background: #a82c0c;
+  color: #ffffff;
 }
 .tile-64::after{
   content: "64";
@@ -222,8 +225,8 @@ h1.title {
   clear: both;
 }
 .tile-128 {
-  background: #ffeb3b;
-  color: #757474;
+  background: #846710;
+  color: #ffffff;
   font-size: 45px;
 }
 .tile-128::after{
@@ -232,8 +235,8 @@ h1.title {
   clear: both;
 }
 .tile-256 {
-  background: #c0ff38;
-  color: #757474;
+  background: #7a6011;
+  color: #ffffff;
   font-size: 45px;
 }
 .tile-256::after{
@@ -242,8 +245,8 @@ h1.title {
   clear: both;
 }
 .tile-512 {
-  background: #7ba919;
-  color: #f9f6f2;
+  background: #3f6b0c;
+  color: #ffffff;
   font-size: 45px;
 }
 .tile-512::after{
@@ -252,8 +255,8 @@ h1.title {
   clear: both;
 }
 .tile-1024 {
-  background: #1fab96;
-  color: #f9f6f2;
+  background: #0c6355;
+  color: #ffffff;
   font-size: 35px;
 }
 .tile-1024::after{
@@ -262,8 +265,8 @@ h1.title {
   clear: both;
 }
 .tile-2048 {
-  background: #01a1ce;
-  color: #f9f6f2;
+  background: #025685;
+  color: #ffffff;
   font-size: 35px;
 }
 .tile-2048::after{
@@ -272,8 +275,8 @@ h1.title {
   clear: both;
 }
 .tile-4096 {
-  background: #673ab7;
-  color: #f9f6f2;
+  background: #4a1770;
+  color: #ffffff;
   font-size: 35px;
 }
 .tile-4096::after{
@@ -282,8 +285,8 @@ h1.title {
   clear: both;
 }
 .tile-8192 {
-  background: #673ab7;
-  color: #f9f6f2;
+  background: #6b1cad;
+  color: #ffffff;
   font-size: 35px;
 }
 .tile-8192::after{
@@ -292,8 +295,8 @@ h1.title {
   clear: both;
 }
 .tile-16384 {
-  background: #673ab7;
-  color: #f9f6f2;
+  background: #86123f;
+  color: #ffffff;
   font-size: 25px;
 }
 .tile-16384::after{
